@@ -1,5 +1,5 @@
 (require 'org)
-(org-babel-tangle-file "bmacs.org")
+(org-babel-tangle-file "mikemacs.org")
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
-(byte-compile-file "bmacs.el")
+(byte-compile-file "mikemacs.el")
 (byte-compile-file "init.el")

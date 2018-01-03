@@ -1,7 +1,7 @@
 clean:
-	@rm -f init.elc bmacs.el bmacs.elc
+	@rm -f init.elc mikemacs.el mikemacs.elc
 
-compile: init.el bmacs.org clean
+compile: init.el mikemacs.org clean
 	@emacs -Q --batch -l 'lisp/compile.el'
 
 update: 

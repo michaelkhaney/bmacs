@@ -1,5 +1,5 @@
-#+TITLE: BMACS
-#+AUTHOR: Bryan Gilbert
+#+TITLE: MIKEMACS
+#+AUTHOR: Michael K. Haney 
 #+PROPERTY: header-args :tangle yes
 
 * Configuration

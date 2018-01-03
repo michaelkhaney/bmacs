@@ -1,8 +1,8 @@
 ;;; Package --- Summary
 
 ;;; Commentary:
-;; The main entry point into BMACS. It either loads the pre-compiled BMACS configuration file
-;; or tangles and loades the BMACS literate org configuration file.
+;; The main entry point into MIKEMACS. It either loads the pre-compiled MIKEMACS configuration file
+;; or tangles and loades the MIKEMACS literate org configuration file.
 
 ;;; Code:
 
@@ -17,9 +17,9 @@
 
 
 (let ((file-name-handler-alist nil))
-  (if (file-exists-p (expand-file-name "bmacs.elc" user-emacs-directory))
-      (load-file (expand-file-name "bmacs.elc" user-emacs-directory))
+  (if (file-exists-p (expand-file-name "mikemacs.elc" user-emacs-directory))
+      (load-file (expand-file-name "mikemacs.elc" user-emacs-directory))
     (require 'org)
-    (org-babel-load-file (expand-file-name "bmacs.org" user-emacs-directory))))
+    (org-babel-load-file (expand-file-name "mikemacs.org" user-emacs-directory))))
 
 ;;; init.el ends here
