@@ -25,6 +25,7 @@ exist without the fantastic [DOOM Emacs configuration](https://github.com/hlissn
 Install
 
     git clone git@github.com:michaelkhaney/mikemacs.git ~/.emacs.d
+    cd ~/.emacs.d
 
 Compile
 
