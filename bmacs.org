@@ -183,7 +183,7 @@
 
 ** About this file
 
-This is Bryan Gilbert's personal Emacs configuration.
+This is Michael K. Haney's personal Emacs configuration.
 
 ** Personal Information
 
