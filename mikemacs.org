@@ -2791,10 +2791,10 @@ A super cool dashboard on startup!
                (call-interactively (command-remapping 'projectile-switch-project)))
               ("Jump to bookmark" "bookmark"
                (call-interactively (command-remapping 'bookmark-jump)))
-              ("Edit mikemacs" "tools"
-               (find-file (expand-file-name "mikemacs.org" mikemacs-emacs-dir)))))))
               ("Edit emacs.d" "tools"
                (find-file (expand-file-name "init.el" mikemacs-emacs-dir)))
+              ("Edit mikemacs" "tools"
+               (find-file (expand-file-name "mikemacs.org" mikemacs-emacs-dir)))))))
 
   (defun +doom-dashboard/next-button ()
     (interactive)
