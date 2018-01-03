@@ -188,8 +188,8 @@ This is Bryan Gilbert's personal Emacs configuration.
 ** Personal Information
 
 #+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Bryan Gilbert"
-        user-mail-address "bryan@bryan.sh"
+  (setq user-full-name "Michael Haney"
+        user-mail-address "michael.k.haney@gmail.com"
         auth-sources (list (expand-file-name "~/.authinfo.gpg")))
 #+END_SRC
 
@@ -2701,6 +2701,14 @@ A super cool dashboard on startup!
             (insert (propertize (+doom-dashboard-center +doom-dashboard--width line)
                                 'face 'font-lock-comment-face) " ")
             (insert "\n"))
+;;          '("███╗   ███╗██╗██╗  ██╗███████╗███╗   ███╗ █████╗  ██████╗███████╗"
+;;            "████╗ ████║██║██║ ██╔╝██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝"
+;;            "██╔████╔██║██║█████╔╝ █████╗  ██╔████╔██║███████║██║     ███████╗"
+;;            "██║╚██╔╝██║██║██╔═██╗ ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║"
+;;            "██║ ╚═╝ ██║██║██║  ██╗███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║"
+;;            "╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝"
+;;            "                        EMACS                        ")))
+
           '("$$$$$$$\\  $$\\      $$\\  $$$$$$\\   $$$$$$\\   $$$$$$   "
             "$$  __$$\\ $$$\\    $$$ |$$  __$$\\ $$  __$$\\ $$  __$$\\ "
             "$$ |  $$ |$$$$\\  $$$$ |$$ /  $$ |$$ /  \\__|$$ /  \\__|"
