@@ -24,7 +24,7 @@ exist without the fantastic [DOOM Emacs configuration](https://github.com/hlissn
 
 Install
 
-    git clone git@github.com:gilbertw1/bmacs-new.git ~/.emacs.d
+    git clone git@github.com:michaelkhaney/mikemacs.git ~/.emacs.d
 
 Compile
 
