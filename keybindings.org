@@ -1,0 +1,154 @@
+* Keybindings
+
+** General
+
+*** Basic
+- =SPC := counsel M-x
+- =SPC ;= evaluate elisp expression
+- =C=`= toggle popup (scratch, terminal, magit, etc)
+
+*** Editing
+
+**** Basic
+- =SPC SPC= blink cursor line
+- =:= command mode
+- =i= insert mode
+- =I= insert beginning of line
+- =a= insert mode (append)
+- =A= append end of line
+- =v= visual mode
+- =V= linewise visual mode
+- =C-v= block visual mode
+**** Motions
+- =h/j/k/l= left/down/up/right
+- =w/W= word / blank separated word (everything but space)
+- =e/E= end of word / bsw
+- =b/B= backward word/ bsw
+- =L= end of line
+- =H= first non-whitespace character
+- =G= go to last line
+- =gg= go to first line
+- =f/F<c>= move to next / prev character 'c'
+- =t<c>= move to but not including next / prev character 'c'
+- =<a>i<o>= perform action inside object
+  + =ciw= change word
+  + =di"= delete inside quotes
+- =<a>a<o>= perform action on entire object (include surrounding space/quote/brace/etc)
+  + =ciw= change word including trailing space
+  + =di"= delete quotes, text inside, and trailing space
+**** Actions
+- =c<m>= change <motion>
+- =d<m>= delete <motion>
+- =y<m>= yank <motion>
+- =p= paste
+- =o= new line below / insert
+- =O= new line above / insert
+- =D= delete from cursor to end of line
+- =dd= delete line
+- =C= change from cursor to end of line
+- =cc= change line
+- =J= join line with next
+**** Visual
+- =sf= surround function
+- =s<b>= surround with e.g. (,[,{,<,",'
+- =gc= comment selected text
+- =v= expand visual region
+- =o= move to other end of selected region
+- =y= copy selected text
+- =d= delete selected text
+- =~= switch case
+- =</>= increase / decrease indention
+- =J= move up line
+- =K= move down line
+- =A= append each selection in block
+- =I= insert each selection in block
+- =R= replace each selection in block
+- =u= undo within region
+**** Navigation
+- =C-u/C-d= move half screen up / down
+- =C-f= avy goto char timer
+- =%= move to matching brace
+- ={/}= move to prev / next paragraph
+- =z<t/./b>= move screen where cursor is at top/center/bottom
+- =C-l= cycle screen position (starting with center)
+- =C-o/C-i= - jump back / forward in history
+**** Marks
+- =m<c>= Create mark
+  + lowercase - buffer specific 
+  + uppercase - global to open buffers
+- ='<c>= Jump to mark (beginning of line)
+- =`<c>= Jump to mark (exact position)
+**** Comments
+- =gcc= comment current line
+- =gc<m>= comment using motion (e.g. gc5j comment current line + 5 below)
+
+*** Files
+- =SPC f f= create / open file
+- =SPC f F= sudo open file
+- =SPC f c= copy files
+- =SPC f C= copy current file
+- =SPC f r= recent files
+- =SPC f R= rename current file
+- =SPC f d= delete file
+- =SPC f D= delete current file
+- =SPC f E= edit current file with sudo
+- =SPC f s= save current buffer
+- =SPC f S= save all buffers
+- =SPC f t= toggle neotree
+- =SPC f y= show and copy filename
+
+*** Search
+- =SPC /= search in project
+- =SPC ?= search from here
+- =SPC s s= swiper (search in file)
+- =SPC j d= dumb-jump go to definition
+- =SPC j D= dumb-jump go to definition other window
+- =SPC j o= search online for text (choose provider)
+
+*** Layouts
+- =SPC l l= create / switch workspace
+- =SPC l d= delete workspace
+- =SPC l TAB= switch last workspace
+- =SPC l s= manually save workspaces
+  
+*** Buffers
+- =SPC b TAB= switch previous buffer (workspace)
+- =SPC b b= switch buffer (workspace)
+- =SPC b B= switch buffer (global)
+- =SPC b d= delete buffer
+- =SPC b D= delete other buffers (workspace)
+- =SPC b n= open new blank buffer
+- =SPC b s= popup scratch buffer
+  
+*** Windows
+- =SPC w h/j/k/l= switch to window left/down/up/right
+- =SPC w H/J/K/L= swap window left/down/up/right
+- =SPC w -= split window horizontally
+- =SPC w /= split window vertically
+- =SPC w m= toggle maximize current window
+- =SPC w d= delete current window
+- =SPC w D= ace delete window
+- =SPC w u/U= winner undo / redo
+- =SPC w s= winner swap window
+- =SPC w == balance windows
+- =SPC W= ace window
+
+*** Projects
+- =SPC p f= find file in project
+- =SPC p r= project based recent files
+- =SPC /= search entire project using rg
+- =SPC p l= create / switch project layout
+- =SPC p t= open project neotree
+- =SPC p a= show TODOs in project
+- =SPC p k= kill buffers in project
+- =SPC p '= open term in project
+- =SPC p != run command in project root
+
+*** Git
+- =SPC g s= open magit status buffer
+- =SPC g b= git blame
+- =SPC g t= git time machine
+- =SPC g l= git log
+- =SPC g y= copy external link to file and line
+- =SPC g g r/R= create gist from region public/private
+- =SPC g g b/B= create gist from buffer public/private
