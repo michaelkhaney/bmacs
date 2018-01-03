@@ -2790,7 +2790,7 @@ A super cool dashboard on startup!
                      (+doom-dashboard-center (- +doom-dashboard--width 2) (buffer-string)))
                    "\n\n"))))
             `(("Homepage" "mark-github"
-               (browse-url "https://github.com/gilbertw1/bmacs"))
+               (browse-url "https://github.com/michaelkhaney/mikemacs"))
               ,(when (and (file-exists-p (expand-file-name persp-auto-save-fname persp-save-dir)))
                  '("Reload last session" "history"
                    (+workspace/load-session)))
@@ -8056,14 +8056,14 @@ session)."
 Open url links in qutebrowser
 
 #+BEGIN_SRC emacs-lisp
-(defun gilbertw1/browse-url (url &optional ignored)
+(defun mkh/browse-url (url &optional ignored)
   (interactive (browse-url-interactive-arg "URL: "))
-  (call-process "/home/gilbertw1/bin/open-qutebrowser" nil 0 nil url))
-(setq browse-url-browser-function #'gilbertw1/browse-url)
+  (call-process "/home/mkh/bin/open-qutebrowser" nil 0 nil url))
+(setq browse-url-browser-function #'mkh/browse-url)
 
-(defun gilbertw1/browse-url-new-window (url &optional ignored)
+(defun mkh/browse-url-new-window (url &optional ignored)
   (call-process "qutebrowser" nil 0 nil "--target" "window" url))
-(setq counsel-dash-browser-func #'gilbertw1/browse-url-new-window)
+(setq counsel-dash-browser-func #'mkh/browse-url-new-window)
 #+END_SRC
 
 *** Indentation
