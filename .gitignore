@@ -1,5 +1,5 @@
 .local/
-/bmacs.el
+/mikemacs.el
 
 # emacs tempfiles that shouldn't be there
 .mc-lists.el
