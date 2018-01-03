@@ -2468,6 +2468,8 @@ repository root."
 
 *** magithub
 
+Collection of interfaces to GitHub integrated into Magit workflows.
+
 #+BEGIN_SRC emacs-lisp
 (use-package magithub
   :ensure t
@@ -2479,6 +2481,15 @@ repository root."
   (magithub-feature-autoinject t)
   (load "magithub-issue-view.el"))
 #+END_SRC
+
+**** Documentation
+
+| Default Key          | Description                        |
+|----------------------+------------------------------------|
+| =H O=                | Toggle offline mode                |
+| =H H=                | Open current repository in browser |
+| =M-x Magithub-clone= | Clone a repository                 |
+|                      |                                    |
 
 ** UI
 
