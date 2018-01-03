@@ -2791,10 +2791,10 @@ A super cool dashboard on startup!
                (call-interactively (command-remapping 'projectile-switch-project)))
               ("Jump to bookmark" "bookmark"
                (call-interactively (command-remapping 'bookmark-jump)))
-              ("Edit emacs.d" "tools"
-               (find-file (expand-file-name "init.el" mikemacs-emacs-dir)))
               ("Edit mikemacs" "tools"
                (find-file (expand-file-name "mikemacs.org" mikemacs-emacs-dir)))))))
+              ("Edit emacs.d" "tools"
+               (find-file (expand-file-name "init.el" mikemacs-emacs-dir)))
 
   (defun +doom-dashboard/next-button ()
     (interactive)
@@ -7663,6 +7663,7 @@ session)."
      :desc "Line numbers"                  :nv "l" #'doom/toggle-line-numbers
      :desc "Indent guides"                 :nv "i" #'highlight-indentation-mode
      :desc "Indent guides (column)"        :nv "I" #'highlight-indentation-current-column-mode
+     :desc "Rainbow mode"                  :nv "r" #'rainbow-mode 
      :desc "Evil goggles"                  :nv "g" #'+evil-goggles/toggle
      :desc "Visual line wrapping"          :nv "v" #'visual-line-mode
      :desc "Whitespace mode"               :nv "w" #'mikemacs/toggle-whitespace)
