@@ -42,6 +42,7 @@
     - [[#help][Help]]
     - [[#operating-system-specific][Operating System Specific]]
   - [[#core-packages][Core Packages]]
+    - [[#golden-ratio][golden-ratio]]
     - [[#which-key][which-key]]
     - [[#smartparens][smartparens]]
     - [[#ivy][Ivy]]
@@ -1206,6 +1207,28 @@ Use shared system clipboard and don't stream visual changes to clipboard
 #+END_SRC
 
 ** Core Packages
+
+*** golden-ratio
+
+#+BEGIN_SRC emacs-lisp
+(use-package golden-ratio
+             :demand t
+             :config
+             (setq golden-ratio-auto-scale 0
+                   golden-ratio-adjust-factor 1.0
+                   golden-ratio-exlude-modes '(imenu-list-major-mode
+                                               eshell-mode
+                                               ansi-term-mode
+                                               pdf-view-mode
+                                               mu4e-main-mode
+                                               mu4e-headers-mode
+                                               calendar-mode
+                                               compilation-mode))
+             (golden-ratio-mode 1))
+(add-to-list 'golden-ratio-extra-commands 'ace-window)
+(add-to-list 'golden-ratio-extra-commands 'avy-goto-char-2)
+(add-to-list 'golden-ratio-extra-commands 'avy-goto-char-timer)
+#+END_SRC
 
 *** which-key
 Dynamically show keybinding options.
