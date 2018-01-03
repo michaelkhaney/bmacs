@@ -12,9 +12,9 @@
 MIKEMACS
 =====
 
-Mike's Emacs. This emacs configuration is heavily influenced by the work of
-[gilbertw1](https://github.com/gilbertw1), and is written as a literate org file. It has been
-optimized to be run graphically on Arch Linux using Emacs 26+.
+Mike's Emacs. This configuration is heavily influenced by [gilbertw1](https://github.com/gilbertw1),
+and is written as a literate org file. It has been optimized to be run graphically on Arch Linux
+using Emacs 26+.
 
 Like [the original](https://github.com/gilbertw1/bmacs), it is heavily influenced by and would not
 exist without the fantastic [DOOM Emacs configuration](https://github.com/hlissner/doom-emacs).
