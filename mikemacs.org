@@ -199,7 +199,7 @@ This is Michael K. Haney's personal Emacs configuration.
 *** Font
 
 #+BEGIN_SRC emacs-lisp
-(defvar bmacs-font (font-spec :family "Iosevka" :size 25))
+(defvar mikemacs-font (font-spec :family "Iosevka" :size 25))
 #+END_SRC
 
 *** Leader Keys
@@ -209,10 +209,10 @@ keybindings.
 
 #+BEGIN_SRC emacs-lisp
 (eval-and-compile
-  (defvar bmacs-leader-key "SPC"
+  (defvar mikemacs-leader-key "SPC"
     "The leader prefix key, for global commands.")
 
-  (defvar bmacs-localleader-key "SPC m"
+  (defvar mikemacs-localleader-key "SPC m"
     "The localleader prefix key, for major-mode specific commands."))
 #+END_SRC
 
@@ -223,35 +223,35 @@ different types of files.
 
 #+BEGIN_SRC emacs-lisp
 (eval-and-compile
-  (defvar bmacs-emacs-dir (expand-file-name user-emacs-directory)
+  (defvar mikemacs-emacs-dir (expand-file-name user-emacs-directory)
     "The path to the emacs.d directory.")
 
-  (defvar bmacs-local-dir (concat bmacs-emacs-dir ".local/")
+  (defvar mikemacs-local-dir (concat mikemacs-emacs-dir ".local/")
     "Root directory for local Emacs files. Use this as permanent storage for files
   that are safe to share across systems (if this config is symlinked across
   several computers).")
 
-  (defvar bmacs-host-dir (concat bmacs-local-dir "@" (system-name))
-    "Directory for hostname-specific file storage. Used by `bmacs-etc-dir' and
-  `bmacs-cache-dir'.")
+  (defvar mikemacs-host-dir (concat mikemacs-local-dir "@" (system-name))
+    "Directory for hostname-specific file storage. Used by `mikemacs-etc-dir' and
+  `mikemacs-cache-dir'.")
 
-  (defvar bmacs-etc-dir (concat bmacs-host-dir "/etc/")
+  (defvar mikemacs-etc-dir (concat mikemacs-host-dir "/etc/")
     "Host-namespaced directory for non-volatile storage. These are not deleted or
-  tampored with by BMACS functions. Use this for dependencies like servers or
+  tampored with by MIKEMACS functions. Use this for dependencies like servers or
   config files that are stable (i.e. it should be unlikely that you need to delete
   them if something goes wrong).")
 
-  (defvar bmacs-cache-dir (concat bmacs-host-dir "/cache/")
-    "Host-namespaced directory for volatile storage. Deleted when `bmacs/reset' is
+  (defvar mikemacs-cache-dir (concat mikemacs-host-dir "/cache/")
+    "Host-namespaced directory for volatile storage. Deleted when `mikemacs/reset' is
   called. Use this for transient files that are generated on the fly like caches
   and temporary files. Anything that may need to be cleared if there are
   problems.")
 
-  (defvar bmacs-packages-dir (concat bmacs-local-dir "packages/")
+  (defvar mikemacs-packages-dir (concat mikemacs-local-dir "packages/")
     "Where package.el and quelpa plugins (and their caches) are stored.")
 
 
-  (dolist (dir (list bmacs-local-dir bmacs-etc-dir bmacs-cache-dir (expand-file-name "elpa" bmacs-packages-dir)))
+  (dolist (dir (list mikemacs-local-dir mikemacs-etc-dir mikemacs-cache-dir (expand-file-name "elpa" mikemacs-packages-dir)))
     (unless (file-directory-p dir)
       (make-directory dir t))))
 #+END_SRC
@@ -259,29 +259,29 @@ different types of files.
 *** Hooks
 
 #+BEGIN_SRC emacs-lisp
-(defvar bmacs-post-init-hook nil
-  "A list of hooks run after BMACS initialization is complete, and after
-`bmacs-init-hook'.")
+(defvar mikemacs-post-init-hook nil
+  "A list of hooks run after MIKEMACS initialization is complete, and after
+`mikemacs-init-hook'.")
 #+END_SRC
 
 *** Large File Handling
 
 #+BEGIN_SRC emacs-lisp
-(defvar bmacs-large-file-size 1
+(defvar mikemacs-large-file-size 1
   "Size (in MB) above which the user will be prompted to open the file literally
 to avoid performance issues. Opening literally means that no major or minor
 modes are active and the buffer is read-only.")
 
-(defvar bmacs-large-file-modes-list
+(defvar mikemacs-large-file-modes-list
   '(archive-mode tar-mode jka-compr git-commit-mode image-mode
     doc-view-mode doc-view-mode-maybe ebrowse-tree-mode pdf-view-mode)
-  "Major modes that `bmacs/check-large-file' will ignore.")
+  "Major modes that `mikemacs/check-large-file' will ignore.")
 #+END_SRC
 
 *** Misc
 
 #+BEGIN_SRC emacs-lisp
-(defvar bmacs-popups '()
+(defvar mikemacs-popups '()
   "A list of popup matchers that determine if a popup can be escaped")
 #+END_SRC
 
@@ -295,7 +295,7 @@ Properly verify outgoing ssl connections.
                         ;; compatibility fallbacks
                         "gnutls-cli -p %p %h"
                         "openssl s_client -connect %h:%p -no_ssl2 -no_ssl3 -ign_eof")
-      nsm-settings-file (expand-file-name "network-security.data" bmacs-cache-dir))
+      nsm-settings-file (expand-file-name "network-security.data" mikemacs-cache-dir))
 #+END_SRC
 
 ** Emacs Initialization
@@ -310,7 +310,7 @@ going to add a hook to reset this value after initialization
   (setq gc-cons-threshold 402653184
         gc-cons-percentage 0.6))
 
-(add-hook 'bmacs-post-init-hook #'(lambda () (setq gc-cons-threshold 16777216
+(add-hook 'mikemacs-post-init-hook #'(lambda () (setq gc-cons-threshold 16777216
                                                    gc-cons-percentage 0.1)))
 #+END_SRC
 
@@ -353,7 +353,7 @@ tell =package.el= to not automatically call it on our behalf. Additionally we're
 
 #+BEGIN_SRC emacs-lisp
   (eval-and-compile
-    (setq package-user-dir (expand-file-name "elpa" bmacs-packages-dir)))
+    (setq package-user-dir (expand-file-name "elpa" mikemacs-packages-dir)))
 
   (setq load-prefer-newer noninteractive
         package--init-file-ensured t
@@ -421,7 +421,7 @@ Not currently using quelpa, so not enabled.
         quelpa-update-melpa-p nil
         quelpa-melpa-recipe-stores nil
         quelpa-self-upgrade-p nil
-        quelpa-dir (expand-file-name "quelpa" bmacs-packages-dir)
+        quelpa-dir (expand-file-name "quelpa" mikemacs-packages-dir)
         quelpa-update-melpa-p nil)
 
   (eval-when-compile
@@ -462,7 +462,7 @@ compilation."
 
 #+BEGIN_SRC emacs-lisp
 (eval-and-compile
-  (defun bmacs-enlist (exp)
+  (defun mikemacs-enlist (exp)
     "Return EXP wrapped in a list, or as-is if already a list."
     (if (listp exp) exp (list exp)))
 
@@ -472,7 +472,7 @@ compilation."
       (setq exp (cadr exp)))
     exp)
 
-  (defvar bmacs-evil-state-alist
+  (defvar mikemacs-evil-state-alist
     '((?n . normal)
       (?v . visual)
       (?i . insert)
@@ -497,12 +497,12 @@ compilation."
   (put ':when         'lisp-indent-function 'defun)
 
 ;; specials
-  (defvar bmacs--keymaps nil)
-  (defvar bmacs--prefix  nil)
-  (defvar bmacs--defer   nil)
-  (defvar bmacs--local   nil)
+  (defvar mikemacs--keymaps nil)
+  (defvar mikemacs--prefix  nil)
+  (defvar mikemacs--defer   nil)
+  (defvar mikemacs--local   nil)
 
-(defun bmacs--keybind-register (key desc &optional modes)
+(defun mikemacs--keybind-register (key desc &optional modes)
   "Register a description for KEY with `which-key' in MODES.
 
   KEYS should be a string in kbd format.
@@ -513,13 +513,13 @@ compilation."
         (which-key-add-major-mode-key-based-replacements mode key desc))
     (which-key-add-key-based-replacements key desc)))
 
-(defun bmacs--keyword-to-states (keyword)
+(defun mikemacs--keyword-to-states (keyword)
   "Convert a KEYWORD into a list of evil state symbols.
 
 For example, :nvi will map to (list 'normal 'visual 'insert). See
-`bmacs-evil-state-alist' to customize this."
+`mikemacs-evil-state-alist' to customize this."
   (cl-loop for l across (substring (symbol-name keyword) 1)
-           if (cdr (assq l bmacs-evil-state-alist))
+           if (cdr (assq l mikemacs-evil-state-alist))
              collect it
            else
              do (error "not a valid state: %s" l)))
@@ -547,7 +547,7 @@ States
 
     If states are omitted the keybind will be global.
 
-    This can be customized with `bmacs-evil-state-alist'.
+    This can be customized with `mikemacs-evil-state-alist'.
 
     :textobj is a special state that takes a key and two commands, one for the
     inner binding, another for the outer.
@@ -573,10 +573,10 @@ Example
           (:when IS-MAC
            :n \"M-s\" 'some-fn
            :i \"M-o\" (lambda (interactive) (message \"Hi\"))))"
-  (let ((bmacs--keymaps bmacs--keymaps)
-        (bmacs--prefix  bmacs--prefix)
-        (bmacs--defer   bmacs--defer)
-        (bmacs--local   bmacs--local)
+  (let ((mikemacs--keymaps mikemacs--keymaps)
+        (mikemacs--prefix  mikemacs--prefix)
+        (mikemacs--defer   mikemacs--defer)
+        (mikemacs--local   mikemacs--local)
         key def states forms desc modes)
     (while rest
       (setq key (pop rest))
@@ -588,11 +588,11 @@ Example
        ;; it's a flag
        ((keywordp key)
         (cond ((eq key :leader)
-               (push 'bmacs-leader-key rest)
+               (push 'mikemacs-leader-key rest)
                (setq key :prefix
                      desc "<leader>"))
               ((eq key :localleader)
-               (push 'bmacs-localleader-key rest)
+               (push 'mikemacs-localleader-key rest)
                (setq key :prefix
                      desc "<localleader>")))
         (pcase key
@@ -600,13 +600,13 @@ Example
           (:unless  (push `(if (not ,(pop rest)) ,(macroexpand `(map! ,@rest))) forms) (setq rest '()))
           (:after   (push `(after! ,(pop rest)   ,(macroexpand `(map! ,@rest))) forms) (setq rest '()))
           (:desc    (setq desc (pop rest)))
-          (:map*    (setq bmacs--defer t) (push :map rest))
+          (:map*    (setq mikemacs--defer t) (push :map rest))
           (:map
-            (setq bmacs--keymaps (bmacs-enlist (pop rest))))
+            (setq mikemacs--keymaps (mikemacs-enlist (pop rest))))
           (:mode
-            (setq modes (bmacs-enlist (pop rest)))
-            (unless bmacs--keymaps
-              (setq bmacs--keymaps
+            (setq modes (mikemacs-enlist (pop rest)))
+            (unless mikemacs--keymaps
+              (setq mikemacs--keymaps
                     (cl-loop for m in modes
                              collect (intern (format "%s-map" (symbol-name m)))))))
           (:textobj
@@ -618,16 +618,16 @@ Example
                     forms)))
           (:prefix
             (let ((def (pop rest)))
-              (setq bmacs--prefix `(vconcat ,bmacs--prefix (kbd ,def)))
+              (setq mikemacs--prefix `(vconcat ,mikemacs--prefix (kbd ,def)))
               (when desc
-                (push `(bmacs--keybind-register ,(key-description (eval bmacs--prefix))
+                (push `(mikemacs--keybind-register ,(key-description (eval mikemacs--prefix))
                                                 ,desc ',modes)
                       forms)
                 (setq desc nil))))
           (:local
-           (setq bmacs--local t))
-          (_ ; might be a state bmacs--prefix
-           (setq states (bmacs--keyword-to-states key)))))
+           (setq mikemacs--local t))
+          (_ ; might be a state mikemacs--prefix
+           (setq states (mikemacs--keyword-to-states key)))))
 
        ;; It's a key-def pair
        ((or (stringp key)
@@ -640,40 +640,40 @@ Example
                 (setq key `(kbd ,key)))
               (when (stringp key)
                 (setq key (kbd key)))
-              (when bmacs--prefix
-                (setq key (append bmacs--prefix (list key))))
+              (when mikemacs--prefix
+                (setq key (append mikemacs--prefix (list key))))
               (unless (> (length rest) 0)
                 (user-error "map! has no definition for %s key" key))
               (setq def (pop rest))
               (when desc
-                (push `(bmacs--keybind-register ,(key-description (eval key))
+                (push `(mikemacs--keybind-register ,(key-description (eval key))
                                               ,desc ',modes)
                       forms))
-              (cond ((and bmacs--local bmacs--keymaps)
-                     (push `(lwarn 'bmacs-map :warning
+              (cond ((and mikemacs--local mikemacs--keymaps)
+                     (push `(lwarn 'mikemacs-map :warning
                                    "Can't local bind '%s' key to a keymap; skipped"
                                    ,key)
                            forms)
                      (throw 'skip 'local))
-                    ((and bmacs--keymaps states)
-                     (dolist (keymap bmacs--keymaps)
-                       (push `(,(if bmacs--defer 'evil-define-key 'evil-define-key*)
+                    ((and mikemacs--keymaps states)
+                     (dolist (keymap mikemacs--keymaps)
+                       (push `(,(if mikemacs--defer 'evil-define-key 'evil-define-key*)
                                ',states ,keymap ,key ,def)
                              forms)))
                     (states
                      (dolist (state states)
                        (push `(define-key
-                                ,(intern (format "evil-%s-state-%smap" state (if bmacs--local "local-" "")))
+                                ,(intern (format "evil-%s-state-%smap" state (if mikemacs--local "local-" "")))
                                 ,key ,def)
                              forms)))
-                    (bmacs--keymaps
-                     (dolist (keymap bmacs--keymaps)
+                    (mikemacs--keymaps
+                     (dolist (keymap mikemacs--keymaps)
                        (push `(define-key ,keymap ,key ,def) forms)))
                     (t
-                     (push `(,(if bmacs--local 'local-set-key 'global-set-key) ,key ,def)
+                     (push `(,(if mikemacs--local 'local-set-key 'global-set-key) ,key ,def)
                            forms))))
           (setq states '()
-                bmacs--local nil
+                mikemacs--local nil
                 desc nil)))
 
        (t (user-error "Invalid key %s" key))))
@@ -685,16 +685,16 @@ A macro that makes adding hooks easy
 
 #+BEGIN_SRC emacs-lisp
 (eval-and-compile
-  (defun bmacs--resolve-hook-forms (hooks)
+  (defun mikemacs--resolve-hook-forms (hooks)
     (cl-loop with quoted-p = (eq (car-safe hooks) 'quote)
-             for hook in (bmacs-enlist (doom-unquote hooks))
+             for hook in (mikemacs-enlist (doom-unquote hooks))
              if (eq (car-safe hook) 'quote)
               collect (cadr hook)
              else if quoted-p
               collect hook
              else collect (intern (format "%s-hook" (symbol-name hook)))))
 
-  (defvar bmacs--transient-counter 0)
+  (defvar mikemacs--transient-counter 0)
   (defmacro add-transient-hook! (hook &rest forms)
     "Attaches transient forms to a HOOK.
 
@@ -704,7 +704,7 @@ A macro that makes adding hooks easy
   then it detaches itself."
     (declare (indent 1))
     (let ((append (eq (car forms) :after))
-          (fn (intern (format "bmacs-transient-hook-%s" (cl-incf bmacs--transient-counter)))))
+          (fn (intern (format "mikemacs-transient-hook-%s" (cl-incf mikemacs--transient-counter)))))
       `(when ,hook
          (fset ',fn
                (lambda (&rest _)
@@ -747,7 +747,7 @@ Body forms can access the hook's arguments through the let-bound variable
         (:append (setq append-p t))
         (:local  (setq local-p t))
         (:remove (setq hook-fn 'remove-hook))))
-    (let ((hooks (bmacs--resolve-hook-forms (pop args)))
+    (let ((hooks (mikemacs--resolve-hook-forms (pop args)))
           (funcs
            (let ((val (car args)))
              (if (memq (car-safe val) '(quote function))
@@ -877,14 +877,14 @@ TODO - Sort these out better
  minibuffer-prompt-properties '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
  ;; History & backup settings (save nothing, that's what git is for)
  ;; files
- abbrev-file-name             (concat bmacs-local-dir "abbrev.el")
- auto-save-list-file-name     (concat bmacs-cache-dir "autosave"))
+ abbrev-file-name             (concat mikemacs-local-dir "abbrev.el")
+ auto-save-list-file-name     (concat mikemacs-cache-dir "autosave"))
 #+END_SRC
 
 **** Pcache File Location
 
 #+BEGIN_SRC emacs-lisp
-(setq pcache-directory (concat bmacs-cache-dir "pcache"))
+(setq pcache-directory (concat mikemacs-cache-dir "pcache"))
 #+END_SRC
 
 **** Warnings
@@ -918,12 +918,12 @@ We don't make any backups of files. This is what git is for.
 
 From http://www.wisdomandwonder.com/wp-content/uploads/2014/03/C3F.html:
 #+BEGIN_SRC emacs-lisp
-(setq savehist-file (concat bmacs-cache-dir "savehist")
+(setq savehist-file (concat mikemacs-cache-dir "savehist")
       history-length 500
       savehist-save-minibuffer-history t
       savehist-autosave-interval nil ; save on kill only
       savehist-additional-variables '(kill-ring search-ring regexp-search-ring)
-      save-place-file (concat bmacs-cache-dir "saveplace"))
+      save-place-file (concat mikemacs-cache-dir "saveplace"))
 
 (savehist-mode +1)
 (save-place-mode +1)
@@ -977,7 +977,7 @@ confirmation."
   x-stretch-cursor nil
   ;; defer jit font locking slightly to [try to] improve Emacs performance
   jit-lock-defer-time nil
-  ;; BMACS - improve cpu usage
+  ;; MIKEMACS - improve cpu usage
   jit-lock-stealth-nice 0.5
   jit-lock-stealth-time 1
   jit-lock-stealth-verbose nil
@@ -997,22 +997,22 @@ confirmation."
 Enable line numbers
 
 #+BEGIN_SRC emacs-lisp
-(defun bmacs|enable-line-numbers (&optional arg)
+(defun mikemacs|enable-line-numbers (&optional arg)
   "Enables the display of line numbers, using `display-line-numbers' (in Emacs
 26+) or `nlinum-mode'."
   (if (boundp 'display-line-numbers)
       (setq display-line-numbers t)
     (nlinum-mode +1)))
 
-(defun bmacs|disable-line-numbers ()
+(defun mikemacs|disable-line-numbers ()
   "Disable the display of line numbers."
   (if (boundp 'display-line-numbers)
       (setq display-line-numbers nil)
     (nlinum-mode -1)))
 
-(add-hook 'prog-mode-hook #'bmacs|enable-line-numbers)
-(add-hook 'text-mode-hook #'bmacs|enable-line-numbers)
-(add-hook 'conf-mode-hook #'bmacs|enable-line-numbers)
+(add-hook 'prog-mode-hook #'mikemacs|enable-line-numbers)
+(add-hook 'text-mode-hook #'mikemacs|enable-line-numbers)
+(add-hook 'conf-mode-hook #'mikemacs|enable-line-numbers)
 #+END_SRC
 
 *** Editor
@@ -1023,7 +1023,7 @@ Enable line numbers
  ;; Save clipboard contents into kill-ring before replacing them
  save-interprogram-paste-before-kill t
  ;; Bookmarks
- bookmark-default-file (concat bmacs-etc-dir "bookmarks")
+ bookmark-default-file (concat mikemacs-etc-dir "bookmarks")
  bookmark-save-flag t
  ;; Formatting
  delete-trailing-lines nil
@@ -1065,14 +1065,14 @@ Enable line numbers
 (push '("/LICENSE$" . text-mode) auto-mode-alist)
 
 
-(defun bmacs/check-large-file ()
-  "Check if the buffer's file is large (see `bmacs-large-file-size'). If so, ask
+(defun mikemacs/check-large-file ()
+  "Check if the buffer's file is large (see `mikemacs-large-file-size'). If so, ask
 for confirmation to open it literally (read-only, disabled undo and in
 fundamental-mode) for performance sake."
   (let* ((filename (buffer-file-name))
          (size (nth 7 (file-attributes filename))))
-    (when (and (not (memq major-mode bmacs-large-file-modes-list))
-               size (> size (* 1024 1024 bmacs-large-file-size))
+    (when (and (not (memq major-mode mikemacs-large-file-modes-list))
+               size (> size (* 1024 1024 mikemacs-large-file-size))
                (y-or-n-p
                 (format (concat "%s is a large file, open literally to "
                                 "avoid performance issues?")
@@ -1081,7 +1081,7 @@ fundamental-mode) for performance sake."
       (buffer-disable-undo)
       (fundamental-mode))))
 
-(add-hook 'find-file-hook #'bmacs/check-large-file)
+(add-hook 'find-file-hook #'mikemacs/check-large-file)
 #+END_SRC
 
 **** TODO Break apart?
@@ -1089,13 +1089,13 @@ fundamental-mode) for performance sake."
 **** Auto Indent Pasted Code
 
 #+BEGIN_SRC emacs-lisp
-(defvar bmacs|yank-indent-threshold 1000 "don't auto indent over 1000 lines")
+(defvar mikemacs|yank-indent-threshold 1000 "don't auto indent over 1000 lines")
 
-(defvar bmacs|indent-sensitive-modes '(conf-mode coffee-mode haml-mode python-mode slim-mode yaml-mode)
+(defvar mikemacs|indent-sensitive-modes '(conf-mode coffee-mode haml-mode python-mode slim-mode yaml-mode)
   "modes to limit auto indentation on")
 
 
-(defmacro bmacs|advise-commands (advice-name commands class &rest body)
+(defmacro mikemacs|advise-commands (advice-name commands class &rest body)
   "Apply advice named ADVICE-NAME to multiple COMMANDS.
   The body of the advice is in BODY."
   `(progn
@@ -1106,33 +1106,33 @@ fundamental-mode) for performance sake."
                     ,@body))
                commands)))
 
-(defvar bmacs-indent-sensitive-modes '(conf-mode coffee-mode haml-mode python-mode slim-mode yaml-mode)
+(defvar mikemacs-indent-sensitive-modes '(conf-mode coffee-mode haml-mode python-mode slim-mode yaml-mode)
   "modes to limit auto indentation on")
 
-(defun bmacs|yank-advised-indent-function (beg end)
+(defun mikemacs|yank-advised-indent-function (beg end)
   "Do indentation, as long as the region isn't too large."
-  (if (<= (- end beg) bmacs|yank-indent-threshold)
+  (if (<= (- end beg) mikemacs|yank-indent-threshold)
       (indent-region beg end nil)))
 
-(bmacs|advise-commands
+(mikemacs|advise-commands
   "indent" (evil-paste-before evil-paste-after) around
-  "If current mode is not one of bmacs-indent-sensitive-modes
+  "If current mode is not one of mikemacs-indent-sensitive-modes
   indent yanked text (with universal arg don't indent)."
   ad-do-it
   (evil-with-single-undo
     (if (and (not (equal '(4) (ad-get-arg 0)))
-             (not (member major-mode bmacs-indent-sensitive-modes)) ;; TODO indent-sensitive-modes
+             (not (member major-mode mikemacs-indent-sensitive-modes)) ;; TODO indent-sensitive-modes
              (derived-mode-p 'prog-mode))
         (let ((transient-mark-mode nil)
               (save-undo buffer-undo-list))
-          (bmacs|yank-advised-indent-function (region-beginning)
+          (mikemacs|yank-advised-indent-function (region-beginning)
                                                 (region-end))))))
 #+END_SRC
 
 *** Font
 
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :font bmacs-font)
+(set-face-attribute 'default nil :font mikemacs-font)
 #+END_SRC
 
 
@@ -1299,7 +1299,7 @@ They power and the glory! Generic complete anything frontend
 (use-package ivy
   :demand t
   :init
-  (add-hook 'bmacs-post-init-hook #'ivy-mode)
+  (add-hook 'mikemacs-post-init-hook #'ivy-mode)
   :config
   (setq ivy-height 12
         ivy-wrap t
@@ -1312,7 +1312,7 @@ They power and the glory! Generic complete anything frontend
         ivy-format-function #'ivy-format-function-line
         ;; disable magic slash on non-match
         ivy-magic-slash-non-match-action nil
-        ;; BMACS allow input prompt value to be selectable
+        ;; MIKEMACS allow input prompt value to be selectable
         ivy-use-selectable-prompt t)
 
   (after! magit     (setq magit-completing-read-function #'ivy-completing-read))
@@ -1665,7 +1665,8 @@ I like to prevent evil from yanking text to the clipboard in many scenarios.
 Awesome visual search utility
 
 #+BEGIN_SRC emacs-lisp
-(use-package swiper :commands (swiper swiper-all))
+(use-package swiper
+             :commands (swiper swiper-all))
 #+END_SRC
 
 *** Counsel
@@ -1755,7 +1756,7 @@ Improved M-x
 (use-package smex
   :commands (smex smex-major-mode-commands)
   :config
-  (setq smex-save-file (concat bmacs-cache-dir "/smex-items"))
+  (setq smex-save-file (concat mikemacs-cache-dir "/smex-items"))
   (smex-initialize))
 #+END_SRC
 
@@ -1858,7 +1859,7 @@ Keep company completion statistics to improve sorting
 (use-package company-statistics
   :after company
   :config
-  (setq company-statistics-file (concat bmacs-cache-dir "company-stats-cache.el"))
+  (setq company-statistics-file (concat mikemacs-cache-dir "company-stats-cache.el"))
   (quiet! (company-statistics-mode +1)))
 #+END_SRC
 
@@ -1906,7 +1907,7 @@ Allows for creation of isolated workspaces
         persp-auto-save-fname "autosave"
         persp-auto-resume-time 1
         persp-auto-save-opt 1
-        persp-save-dir (concat bmacs-etc-dir "workspaces/"))
+        persp-save-dir (concat mikemacs-etc-dir "workspaces/"))
 
   (defun +workspaces*track-last-persp (switch-fun &rest args)
     (let ((before-persp (safe-persp-name (get-current-persp)))
@@ -1915,7 +1916,7 @@ Allows for creation of isolated workspaces
         (setq +workspaces-last-persp before-persp))))
 
   (advice-add #'persp-switch :around #'+workspaces*track-last-persp)
-  (add-hook 'bmacs-post-init-hook #'(lambda () (persp-mode 1))))
+  (add-hook 'mikemacs-post-init-hook #'(lambda () (persp-mode 1))))
 
 (defun +workspace-exists-p (name)
   "Returns t if NAME is the name of an existing workspace."
@@ -2056,7 +2057,7 @@ Escape everything
         evil-escape-key-sequence nil
         evil-escape-excluded-major-modes '(neotree-mode)
         evil-escape-delay 0.25)
-  (add-hook 'bmacs-post-init-hook #'evil-escape-mode)
+  (add-hook 'mikemacs-post-init-hook #'evil-escape-mode)
   :config
   ;; no `evil-escape' in minibuffer
   (cl-pushnew #'minibufferp evil-escape-inhibit-functions :test #'eq)
@@ -2163,7 +2164,7 @@ I only really use this for the extended s/S/f/F behavior
         evil-snipe-repeat-scope 'buffer
         evil-snipe-char-fold t
         evil-snipe-disabled-modes '(magit-mode elfeed-show-mode elfeed-search-mode))
-  (add-hook 'bmacs-post-init-hook #'evil-snipe-override-mode))
+  (add-hook 'mikemacs-post-init-hook #'evil-snipe-override-mode))
 #+END_SRC
 
 **** evil-surround
@@ -2274,7 +2275,7 @@ Branching undo
   ;; can be very destructive! So disable it!
   (setq undo-tree-auto-save-history nil
         undo-tree-history-directory-alist
-        (list (cons "." (concat bmacs-cache-dir "undo-tree-hist/")))))
+        (list (cons "." (concat mikemacs-cache-dir "undo-tree-hist/")))))
 #+END_SRC
 
 *** expand-region
@@ -2422,7 +2423,7 @@ Go back in time ... at least in your code
 
 (defvar git-link-open-in-browser)
 
-(defun bmacs/git-browse ()
+(defun mikemacs/git-browse ()
   "Open the website for the current version controlled file. Fallback to
 repository root."
   (interactive)
@@ -2475,7 +2476,7 @@ Collection of interfaces to GitHub integrated into Magit workflows.
   :ensure t
   :after magit
   :init
-  (setq magithub-dir (concat bmacs-cache-dir "magithub"))
+  (setq magithub-dir (concat mikemacs-cache-dir "magithub"))
   (setq magithub-cache t)
   :config
   (magithub-feature-autoinject t)
@@ -2524,7 +2525,7 @@ Vi like tilde's in the fringe for past EOF
   :demand t
   :commands (global-vi-tilde-fringe-mode vi-tilde-fringe-mode)
   :init
-  (add-hook 'bmacs-post-init-hook #'global-vi-tilde-fringe-mode)
+  (add-hook 'mikemacs-post-init-hook #'global-vi-tilde-fringe-mode)
   :config
   (defun +vi-tilde-fringe|disable ()
     (vi-tilde-fringe-mode -1)))
@@ -2540,13 +2541,13 @@ Vi like tilde's in the fringe for past EOF
   (load-theme 'doom-one t)
 
   ;; improve integration with org-mode
-  (add-hook 'bmacs-post-init-hook #'doom-themes-org-config)
+  (add-hook 'mikemacs-post-init-hook #'doom-themes-org-config)
 
   ;; blink mode-line on errors
-  (add-hook 'bmacs-post-init-hook #'doom-themes-visual-bell-config)
+  (add-hook 'mikemacs-post-init-hook #'doom-themes-visual-bell-config)
 
   ;; Add file icons to doom-neotree
-  (add-hook 'bmacs-post-init-hook #'doom-themes-neotree-config)
+  (add-hook 'mikemacs-post-init-hook #'doom-themes-neotree-config)
   (setq doom-neotree-enable-variable-pitch nil
         doom-neotree-file-icons 'simple
         doom-neotree-line-spacing 2))
@@ -2629,8 +2630,8 @@ A super cool dashboard on startup!
 
 
   (define-derived-mode +doom-dashboard-mode special-mode
-    (format "BMACS v%s" "0.1.0")
-    "Major mode for the BMACS dashboard buffer."
+    (format "MIKEMACS v%s" "0.1.0")
+    "Major mode for the MIKEMACS dashboard buffer."
     (read-only-mode +1)
     (setq truncate-lines t)
     (setq-local whitespace-style nil)
@@ -2663,7 +2664,7 @@ A super cool dashboard on startup!
     (add-hook 'focus-in-hook #'+doom-dashboard-reload)
     (add-hook 'kill-buffer-query-functions #'+doom-dashboard|kill-buffer-query-fn)
     (when (and (display-graphic-p) (not (daemonp)))
-      (let ((default-directory bmacs-emacs-dir))
+      (let ((default-directory mikemacs-emacs-dir))
         (+doom-dashboard/open (selected-frame)))))
 
   (defun +doom-dashboard|kill-buffer-query-fn ()
@@ -2741,24 +2742,14 @@ A super cool dashboard on startup!
             (insert (propertize (+doom-dashboard-center +doom-dashboard--width line)
                                 'face 'font-lock-comment-face) " ")
             (insert "\n"))
-;;          '("███╗   ███╗██╗██╗  ██╗███████╗███╗   ███╗ █████╗  ██████╗███████╗"
-;;            "████╗ ████║██║██║ ██╔╝██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝"
-;;            "██╔████╔██║██║█████╔╝ █████╗  ██╔████╔██║███████║██║     ███████╗"
-;;            "██║╚██╔╝██║██║██╔═██╗ ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║"
-;;            "██║ ╚═╝ ██║██║██║  ██╗███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║"
-;;            "╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝"
-;;            "                        EMACS                        ")))
-
-          '("$$$$$$$\\  $$\\      $$\\  $$$$$$\\   $$$$$$\\   $$$$$$   "
-            "$$  __$$\\ $$$\\    $$$ |$$  __$$\\ $$  __$$\\ $$  __$$\\ "
-            "$$ |  $$ |$$$$\\  $$$$ |$$ /  $$ |$$ /  \\__|$$ /  \\__|"
-            "$$$$$$$\\ |$$\\$$\\$$ $$ |$$$$$$$$ |$$ |      \\$$$$$$\\  "
-            "$$  __$$\\ $$ \\$$$  $$ |$$  __$$ |$$ |       \\____$$\\ "
-            "$$ |  $$ |$$ |\\$  /$$ |$$ |  $$ |$$ |  $$\\ $$\\   $$ |"
-            "$$$$$$$  |$$ | \\_/ $$ |$$ |  $$ |\\$$$$$$  |\\$$$$$$  |"
-            "\\_______/ \\__|     \\__|\\__|  \\__| \\______/  \\______/ "
-            "                                                     "
-            "                        EMACS                        ")))
+         '("███╗   ███╗██╗██╗  ██╗███████╗███╗   ███╗ █████╗  ██████╗███████╗"
+           "████╗ ████║██║██║ ██╔╝██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝"
+           "██╔████╔██║██║█████╔╝ █████╗  ██╔████╔██║███████║██║     ███████╗"
+           "██║╚██╔╝██║██║██╔═██╗ ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║"
+           "██║ ╚═╝ ██║██║██║  ██╗███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║"
+           "╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝"
+           "                                                                 "
+           "                        EMACS                        ")))
 
   (defun doom-dashboard-widget--loaded ()
     (insert
@@ -2801,7 +2792,9 @@ A super cool dashboard on startup!
               ("Jump to bookmark" "bookmark"
                (call-interactively (command-remapping 'bookmark-jump)))
               ("Edit emacs.d" "tools"
-               (find-file (expand-file-name "init.el" bmacs-emacs-dir)))))))
+               (find-file (expand-file-name "init.el" mikemacs-emacs-dir)))
+              ("Edit mikemacs" "tools"
+               (find-file (expand-file-name "mikemacs.org" mikemacs-emacs-dir)))))))
 
   (defun +doom-dashboard/next-button ()
     (interactive)
@@ -3175,7 +3168,7 @@ If TRUNCATE-TAIL is t also truncate the parent directory of the file."
 
 (defun +doom-modeline--buffer-file-name-relative (&optional include-project)
   "Propertized `buffer-file-name' showing directories relative to project's root only."
-  (let ((root (bmacs-project-root))
+  (let ((root (mikemacs-project-root))
         (active (active)))
     (if (null root)
         (propertize "%b" 'face (if active 'doom-modeline-buffer-file))
@@ -3195,7 +3188,7 @@ If TRUNCATE-PROJECT-ROOT-PARENT is t space will be saved by truncating it down
 fish-shell style.
 Example:
 ~/Projects/FOSS/emacs/lisp/comint.el => ~/P/F/emacs/lisp/comint.el"
-  (let* ((project-root (bmacs-project-root))
+  (let* ((project-root (mikemacs-project-root))
          (file-name-split (shrink-path-file-mixed project-root
                                                   (file-name-directory
                                                    (or buffer-file-truename
@@ -3558,7 +3551,7 @@ Returns \"\" to not break --no-window-system."
 ;; Bootstrap
 ;;
 
-(add-hook 'bmacs-post-init-hook #'+doom-modeline|init)
+(add-hook 'mikemacs-post-init-hook #'+doom-modeline|init)
 (add-hook 'doom-scratch-buffer-hook #'+doom-modeline|set-special-modeline)
 (add-hook '+doom-dashboard-mode-hook #'+doom-modeline|set-project-modeline)
 
@@ -3573,7 +3566,7 @@ Returns \"\" to not break --no-window-system."
 *** doom-quit
 Quit prompt with messages
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (defvar +doom-quit-messages
   '(;; from Doom 1
     "Please don't leave, there's more demons to toast!"
@@ -3614,7 +3607,7 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
   :commands evil-goggles-mode
   :init
   (setq evil-goggles-duration 0.2)
-  (add-hook 'bmacs-post-init-hook #'evil-goggles-mode t))
+  (add-hook 'mikemacs-post-init-hook #'evil-goggles-mode t))
 
 (defun +evil-goggles/toggle ()
   "Toggle evil goggles mode."
@@ -3637,7 +3630,7 @@ for comment start/end characters."
        '(((lambda (limit)
             (let (case-fold-search)
               (and (re-search-forward hl-todo-regexp limit t)
-                   (memq 'font-lock-comment-face (bmacs-enlist (get-text-property (point) 'face))))))
+                   (memq 'font-lock-comment-face (mikemacs-enlist (get-text-property (point) 'face))))))
           (1 (hl-todo-get-face) t t))))
   (when hl-todo-mode
     (hl-todo-mode -1)
@@ -3662,7 +3655,7 @@ for comment start/end characters."
 *** nav-flash
 
 #+BEGIN_SRC emacs-lisp
-(defun bmacs*blink-cursor-maybe (orig-fn &rest args)
+(defun mikemacs*blink-cursor-maybe (orig-fn &rest args)
   "Blink current line if the window has moved."
   (let ((point (save-excursion (goto-char (window-start))
                                (point-marker))))
@@ -3671,10 +3664,10 @@ for comment start/end characters."
                 (equal point
                        (save-excursion (goto-char (window-start))
                                        (point-marker))))
-      (bmacs/blink-cursor))))
+      (mikemacs/blink-cursor))))
 
 ;;;###autoload
-(defun bmacs/blink-cursor (&rest _)
+(defun mikemacs/blink-cursor (&rest _)
   "Blink current line using `nav-flash'."
   (interactive)
   (unless (minibufferp)
@@ -3687,14 +3680,14 @@ for comment start/end characters."
   :init
   ;; NOTE In :feature jump `recenter' is hooked to a bunch of jumping commands,
   ;; which will trigger nav-flash.
-  (advice-add #'windmove-do-window-select :around #'bmacs*blink-cursor-maybe)
-  (advice-add #'recenter :around #'bmacs*blink-cursor-maybe)
+  (advice-add #'windmove-do-window-select :around #'mikemacs*blink-cursor-maybe)
+  (advice-add #'recenter :around #'mikemacs*blink-cursor-maybe)
 
   (after! evil
-    (advice-add #'evil--jumps-jump   :after #'bmacs/blink-cursor)
-    (advice-add #'evil-window-top    :after #'bmacs/blink-cursor)
-    (advice-add #'evil-window-middle :after #'bmacs/blink-cursor)
-    (advice-add #'evil-window-bottom :after #'bmacs/blink-cursor)))
+    (advice-add #'evil--jumps-jump   :after #'mikemacs/blink-cursor)
+    (advice-add #'evil-window-top    :after #'mikemacs/blink-cursor)
+    (advice-add #'evil-window-middle :after #'mikemacs/blink-cursor)
+    (advice-add #'evil-window-bottom :after #'mikemacs/blink-cursor)))
 
 #+END_SRC
 
@@ -3708,7 +3701,7 @@ Praise the sun!
 ;   (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
 ;   :config
 ;   ;(setq solaire-mode-real-buffer-fn #'doom-real-buffer-p) TODO
-;   (add-hook 'bmacs-post-init-hook #'solaire-mode-swap-bg t)
+;   (add-hook 'mikemacs-post-init-hook #'solaire-mode-swap-bg t)
 ;
 ;   ;; Extra modes to activate doom-buffer-mode in
 ;   (add-hook 'gist-mode #'solaire-mode)
@@ -3764,7 +3757,7 @@ Highlights the current line
   ;; On Emacs 26+, when point is on the last line, hl-line highlights bleed into
   ;; the rest of the window after eob. This is the fix.
   (when (boundp 'display-line-numbers)
-    (defun bmacs--line-range ()
+    (defun mikemacs--line-range ()
       (cons (line-beginning-position)
             (cond ((save-excursion
                      (goto-char (line-end-position))
@@ -3774,13 +3767,13 @@ Highlights the current line
                    (line-end-position))
                   (t
                    (line-beginning-position 2)))))
-    (setq hl-line-range-function #'bmacs--line-range))
+    (setq hl-line-range-function #'mikemacs--line-range))
 
   ;; Disable `hl-line' in evil-visual mode (temporarily). `hl-line' can make
   ;; the selection region harder to see while in evil visual mode.
-  (defun bmacs|disable-hl-line () (hl-line-mode -1))
+  (defun mikemacs|disable-hl-line () (hl-line-mode -1))
 
-  (add-hook 'evil-visual-state-entry-hook #'bmacs|disable-hl-line)
+  (add-hook 'evil-visual-state-entry-hook #'mikemacs|disable-hl-line)
   (add-hook 'evil-visual-state-exit-hook #'hl-line-mode))
 #+END_SRC
 
@@ -3817,12 +3810,12 @@ If we're not using Emacs 26+ we need nlinum to support line numbers.
     (add-hook 'hl-line-mode-hook #'(lambda ()
       (remove-overlays (point-min) (point-max) 'face 'hl-line)))
 
-    (defun bmacs|init-nlinum-width ()
+    (defun mikemacs|init-nlinum-width ()
       "Calculate line number column width beforehand (optimization)."
       (setq nlinum--width
             (length (save-excursion (goto-char (point-max))
                                     (format-mode-line "%l")))))
-    (add-hook 'nlinum-mode-hook #'bmacs|init-nlinum-width)))
+    (add-hook 'nlinum-mode-hook #'mikemacs|init-nlinum-width)))
 
 
   (use-package nlinum-hl
@@ -3848,7 +3841,7 @@ Windowing operations (mostly undo/redo)
 #+BEGIN_SRC emacs-lisp
 (defvar winner-dont-bind-my-keys t) ; I'll bind keys myself
 (autoload 'winner-mode "winner" nil t)
-(add-hook 'bmacs-post-init-hook #'winner-mode)
+(add-hook 'mikemacs-post-init-hook #'winner-mode)
 
 #+END_SRC
 
@@ -3861,15 +3854,15 @@ Project support anywhere, for any project
 (use-package projectile
   :demand t
   :init
-  (setq projectile-cache-file (concat bmacs-cache-dir "projectile.cache")
+  (setq projectile-cache-file (concat mikemacs-cache-dir "projectile.cache")
         projectile-enable-caching t
         projectile-indexing-method 'alien
         projectile-require-project-root nil
-        projectile-known-projects-file (concat bmacs-cache-dir "projectile.projects")
+        projectile-known-projects-file (concat mikemacs-cache-dir "projectile.projects")
         projectile-globally-ignored-files '(".DS_Store" "Icon" "TAGS")
         projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".class"))
 
-  (add-hook 'bmacs-post-init-hook #'projectile-mode)
+  (add-hook 'mikemacs-post-init-hook #'projectile-mode)
   :config
   ;; a more generic project root file
   (push ".project" projectile-project-root-files-bottom-up)
@@ -3884,13 +3877,13 @@ Project support anywhere, for any project
 
   ;; Projectile root-searching functions can cause an infinite loop on TRAMP
   ;; connections, so disable them.
-  (defun bmacs--projectile-locate-dominating-file (orig-fn &rest args)
+  (defun mikemacs--projectile-locate-dominating-file (orig-fn &rest args)
     "Don't traverse the file system if on a remote connection."
     (unless (file-remote-p default-directory)
       (apply orig-fn args)))
-  (advice-add #'projectile-locate-dominating-file :around #'bmacs--projectile-locate-dominating-file))
+  (advice-add #'projectile-locate-dominating-file :around #'mikemacs--projectile-locate-dominating-file))
 
-(defun bmacs-project-root ()
+(defun mikemacs-project-root ()
   "Get the path to the root of your project.
 If STRICT-P, return nil if no project was found, otherwise return
 `default-directory'."
@@ -3907,7 +3900,7 @@ If STRICT-P, return nil if no project was found, otherwise return
 (use-package recentf
   :demand t
   :config
-  (setq recentf-save-file (concat bmacs-etc-dir "recentf")
+  (setq recentf-save-file (concat mikemacs-etc-dir "recentf")
       recentf-max-menu-items 0
       recentf-max-saved-items 300)
   (recentf-mode))
@@ -3934,6 +3927,8 @@ Easily select windows for various actions.
   :config
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
         aw-scope 'frame
+        aw-dispatch-always t
+        ace-window-display-mode t
         aw-background t))
 #+END_SRC
 
@@ -3974,7 +3969,7 @@ Jump to any definition ... the dumb way!
   :commands (dumb-jump-go dumb-jump-quick-look dumb-jump-go-other-window
              dumb-jump-back dumb-jump-result-follow)
   :config
-  (setq dumb-jump-default-project bmacs-emacs-dir
+  (setq dumb-jump-default-project mikemacs-emacs-dir
         dumb-jump-aggressive nil
         dumb-jump-use-visible-window nil
         dumb-jump-selector 'ivy))
@@ -3984,7 +3979,7 @@ Jump to any definition ... the dumb way!
     counsel-grep-post-action-hook dumb-jump-after-jump-hook)
   #'recenter)
 
-(defun bmacs/jump-definition (&optional other-window)
+(defun mikemacs/jump-definition (&optional other-window)
   "Jump to the definition of the symbol at point using `dumb-jump'"
   (interactive)
   (evil--jumps-push)
@@ -3992,15 +3987,16 @@ Jump to any definition ... the dumb way!
       (dumb-jump-go-other-window)
     (dumb-jump-go)))
 
-(defun bmacs/jump-definition-other-window ()
+(defun mikemacs/jump-definition-other-window ()
   (interactive)
-  (bmacs/jump-definition t))
+  (mikemacs/jump-definition t))
 #+END_SRC
 
 **** TODO Pull over the jump/search online stuff
 
 ** Org Mode
-It's org-mode ya'll
+
+All configurations for Org-mode/Babel/Capture/etc.
 
 *** Org
 
@@ -4241,7 +4237,7 @@ It's org-mode ya'll
 
 (defun +borg/org-load-hook (func &optional append)
   (if (featurep 'org)
-      (add-hook 'bmacs-post-init-hook func append)
+      (add-hook 'mikemacs-post-init-hook func append)
     (add-hook 'org-load-hook func append)))
 #+END_SRC
 
@@ -4255,7 +4251,7 @@ It's org-mode ya'll
   :defer t)
 
 ;; Ensure ELPA org is prioritized above built-in org.
-(setq load-path (remove-if (lambda (x) (string-match-p "org$" x)) load-path))
+;; (setq load-path (remove-if (lambda (x) (string-match-p "org$" x)) load-path))
 
 ;; Custom variables
 (defvar +borg-dir (expand-file-name "~/org/")
@@ -4292,7 +4288,7 @@ It's org-mode ya'll
   (setq line-spacing 1)
   (visual-line-mode +1)
   (org-indent-mode +1)
-  (bmacs|disable-line-numbers)
+  (mikemacs|disable-line-numbers)
   (setq-local company-idle-delay nil)
   (undo-tree-mode +1)
   (setq-local evil-auto-indent nil)
@@ -4520,14 +4516,17 @@ between the two."
              css
              emacs-lisp
              haskell
+             java
              js
              latex
              ledger
              lilypond
              lisp
              matlab
+             perl
              plantuml
              python
+             R
              restclient ; ob-restclient
              ruby
              rust       ; ob-rust
@@ -4547,6 +4546,8 @@ between the two."
   (add-hook 'org-src-mode-hook #'+org|src-mode-remove-header))
 
 (+borg/org-load-hook #'+org-babel|init t)
+
+(setq org-src-window-setup 'current-window)
 #+END_SRC
 
 *** Capture
@@ -4746,7 +4747,7 @@ between the two."
 
 Configuration
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defvar +email-mu4e-mail-path "~/.mail"
     "The directory path of mu's maildir.")
 
@@ -4964,9 +4965,9 @@ Configuration
               :n "q" #'mu4e-interrupt-update-mail))))
 
 
-  (use-package mu4e-maildirs-extension
-    :after mu4e
-    :config (mu4e-maildirs-extension-load))
+;;  (use-package mu4e-maildirs-extension
+;;    :after mu4e
+;;    :config (mu4e-maildirs-extension-load))
 
 
   (defun bmail-refile-folder-function (msg)
@@ -4994,7 +4995,7 @@ Configuration
        (t nil))))
 
   (defun email-signature (address)
-    (bmacs/file-as-string
+    (mikemacs/file-as-string
      (expand-file-name (concat "~/.signatures/" address))))
 
   (after! mu4e
@@ -5117,7 +5118,7 @@ Quick and awesome documentation lookup
   (add-hook 'python-mode-hook (lambda () (setq-local counsel-dash-docsets '("Python 3"))))
 
   :config
-  (setq counsel-dash-docsets-path (concat bmacs-etc-dir "docsets")))
+  (setq counsel-dash-docsets-path (concat mikemacs-etc-dir "docsets")))
 #+END_SRC
 
 *** Dired
@@ -5131,7 +5132,7 @@ Directories in Emacs
       global-auto-revert-non-file-buffers t
       auto-revert-verbose nil
       ;; files
-      image-dired-dir (concat bmacs-cache-dir "image-dired/")
+      image-dired-dir (concat mikemacs-cache-dir "image-dired/")
       image-dired-db-file (concat image-dired-dir "image-dired/db.el")
       image-dired-gallery-dir (concat image-dired-dir "gallery/")
       image-dired-temp-image-file (concat image-dired-dir "temp-image")
@@ -5230,7 +5231,7 @@ A terminal by Emacs for Emacs!
     (if eshell-window
       (delete-window eshell-window)
       (let ((eshell-buffer-name "*eshell-project*")
-            (eshell-directory-name (bmacs-project-root)))
+            (eshell-directory-name (mikemacs-project-root)))
         (eshell)))))
 
 (defun +eshell-prompt ()
@@ -5249,7 +5250,7 @@ A terminal by Emacs for Emacs!
 (use-package eshell ; built-in
   :commands eshell-mode
   :init
-  (setq eshell-directory-name (concat bmacs-etc-dir "/eshell")
+  (setq eshell-directory-name (concat mikemacs-etc-dir "/eshell")
         eshell-scroll-to-bottom-on-input 'all
         eshell-scroll-to-bottom-on-output 'all
         eshell-buffer-shorthand t
@@ -5261,7 +5262,7 @@ A terminal by Emacs for Emacs!
         eshell-glob-case-insensitive t
         eshell-error-if-no-glob t
         ;; em-alias
-        eshell-aliases-file (concat bmacs-local-dir ".eshell-aliases"))
+        eshell-aliases-file (concat mikemacs-local-dir ".eshell-aliases"))
 
   :config
   (add-to-list 'evil-insert-state-modes 'eshell-mode)
@@ -5295,7 +5296,7 @@ redefines its keys every time `eshell-mode' is enabled."
           :i "C-n"      #'eshell-next-input
           :i "<down>"   #'eshell-next-input
           :m "<return>" #'+eshell/evil-append
-          ;; BMACS - needed to actually send input and use shell
+          ;; MIKEMACS - needed to actually send input and use shell
           :i "<return>" #'eshell-send-input
           :n [remap evil-window-split]     #'+eshell/split
           :n [remap evil-window-vsplit]    #'+eshell/vsplit
@@ -5336,7 +5337,7 @@ TODO - I really have no idea
   "Toggle the neotree window."
   (interactive)
   (let ((path buffer-file-name)
-        (project-root (bmacs-project-root)))
+        (project-root (mikemacs-project-root)))
     (require 'neotree)
     (cond ((and (neo-global--window-exists-p)
                 (get-buffer-window neo-buffer-name t))
@@ -5608,7 +5609,7 @@ Can you hear the C? -- TODO: Pair this down to just basic C/C++ support ... too 
     :after cc-mode
     :commands irony-install-server
     :preface
-    (setq irony-server-install-prefix (concat bmacs-etc-dir "irony-server/"))
+    (setq irony-server-install-prefix (concat mikemacs-etc-dir "irony-server/"))
     :init
     (add-hook! (c-mode c++-mode objc-mode) #'irony-mode)
     :config
@@ -5696,7 +5697,7 @@ Java, but Microsoft
   :after csharp-mode
   :preface
   (setq omnisharp-auto-complete-want-documentation nil
-        omnisharp-server-executable-path (concat bmacs-local-dir "OmniSharp.exe"))
+        omnisharp-server-executable-path (concat mikemacs-local-dir "OmniSharp.exe"))
   :config
   (if (file-exists-p omnisharp-server-executable-path)
       (add-hook! csharp-mode #'(eldoc-mode flycheck-mode omnisharp-mode))
@@ -5849,7 +5850,7 @@ The language that runs on the Emacs interpreter
     (defun +emacs-lisp|init-flycheck ()
       "Initialize flycheck-mode if not in emacs.d."
       (when (and buffer-file-name
-                 (not (file-in-directory-p buffer-file-name bmacs-emacs-dir)))
+                 (not (file-in-directory-p buffer-file-name mikemacs-emacs-dir)))
         (flycheck-mode +1))))
 
   ;;
@@ -6005,7 +6006,7 @@ Python? Lisp? WTF?
     :init
     (add-hook! 'java-mode-hook #'(meghanada-mode rainbow-delimiters-mode))
     :config
-    (setq meghanada-server-install-dir (concat bmacs-etc-dir "meghanada-server/")
+    (setq meghanada-server-install-dir (concat mikemacs-etc-dir "meghanada-server/")
           meghanada-use-company t
           meghanada-use-flycheck t
           meghanada-use-eldoc t
@@ -6289,7 +6290,7 @@ The language of CEO's
   (unless (executable-find "phpctags")
     (warn "php-mode: phpctags isn't installed, auto-completion will be gimped"))
 
-  (setq ac-php-tags-path (concat bmacs-cache-dir "ac-php/")))
+  (setq ac-php-tags-path (concat mikemacs-cache-dir "ac-php/")))
 #+END_SRC
 
 *** Plant Uml
@@ -6302,7 +6303,7 @@ Simple uml syntax
 (use-package plantuml-mode
   :mode "\\.p\\(lant\\)?uml$"
   :config
-  (setq plantuml-jar-path (concat bmacs-etc-dir "plantuml.jar"))
+  (setq plantuml-jar-path (concat mikemacs-etc-dir "plantuml.jar"))
 
   (unless (executable-find "java")
     (warn "plantuml-mode: can't find java, preview disabled."))
@@ -6361,7 +6362,7 @@ is loaded.")
 (use-package python
   :commands python-mode
   :init
-  (setq python-environment-directory bmacs-cache-dir
+  (setq python-environment-directory mikemacs-cache-dir
         python-indent-guess-indent-offset-verbose nil
         python-shell-interpreter "python")
 
@@ -6416,7 +6417,7 @@ environment variables."
   :init
   (add-hook 'python-mode-hook #'anaconda-mode)
   (add-hook 'anaconda-mode-hook #'anaconda-eldoc-mode)
-  (setq anaconda-mode-installation-directory (concat bmacs-etc-dir "anaconda/")
+  (setq anaconda-mode-installation-directory (concat mikemacs-etc-dir "anaconda/")
         anaconda-mode-eldoc-as-single-line t))
 
 (use-package company-anaconda
@@ -6489,7 +6490,7 @@ environment variables."
 The future!
 
 #+BEGIN_SRC emacs-lisp
-(defvar +rust-src-dir (concat bmacs-etc-dir "rust/")
+(defvar +rust-src-dir (concat mikemacs-etc-dir "rust/")
   "The path to Rust source library. Required by racer.")
 
 (use-package rust-mode
@@ -6691,7 +6692,7 @@ Get Scwhifty!
       (tide-setup)
       (flycheck-mode +1)
       (eldoc-mode +1)
-      (setq tide-project-root (bmacs-project-root))))
+      (setq tide-project-root (mikemacs-project-root))))
   (add-hook 'typescript-mode #'+typescript|init-tide)
   (add-hook 'web-mode #'+typescript|init-tide))
 
@@ -6860,8 +6861,8 @@ regular expression. This function adds an entry to the `display-buffer-alist` to
 about how the buffer should be displayed. These constraints define a simple popup behavior.
 
 #+BEGIN_SRC emacs-lisp
-(cl-defun bmacs/make-popup (buffer-rx &optional (height 0.4))
-    (add-to-list 'bmacs-popups buffer-rx)
+(cl-defun mikemacs/make-popup (buffer-rx &optional (height 0.4))
+    (add-to-list 'mikemacs-popups buffer-rx)
     (add-to-list 'display-buffer-alist
                  `(,buffer-rx
                    (display-buffer-reuse-window
@@ -6875,40 +6876,40 @@ Now we're going to create a set of rules based on the buffers we would like to b
 
 #+BEGIN_SRC emacs-lisp
 ;; Messages
-(bmacs/make-popup (rx bos "*Messages*" eos))
+(mikemacs/make-popup (rx bos "*Messages*" eos))
 ;; Backtrace
-(bmacs/make-popup (rx bos "*Backtrace*" eos))
+(mikemacs/make-popup (rx bos "*Backtrace*" eos))
 ;; Pretty Print Eval Output
-(bmacs/make-popup (rx bos "*Pp Eval Output*" eos))
+(mikemacs/make-popup (rx bos "*Pp Eval Output*" eos))
 ;; Help
-(bmacs/make-popup (rx bos "*Help*" eos))
+(mikemacs/make-popup (rx bos "*Help*" eos))
 ;; Restclient Results
-(bmacs/make-popup (rx bos "*HTTP Response*" eos))
+(mikemacs/make-popup (rx bos "*HTTP Response*" eos))
 ;; Eshell
-(bmacs/make-popup (rx bos "*eshell*" eos))
+(mikemacs/make-popup (rx bos "*eshell*" eos))
 ;; Eshell Project Buffer
-(bmacs/make-popup (rx bos "*eshell-project*" eos))
+(mikemacs/make-popup (rx bos "*eshell-project*" eos))
 ;; Flycheck Errors
-(bmacs/make-popup (rx bos "*Flycheck errors*" eos))
+(mikemacs/make-popup (rx bos "*Flycheck errors*" eos))
 ;; VC Diff
-(bmacs/make-popup (rx bos "*vc-diff*" eos))
+(mikemacs/make-popup (rx bos "*vc-diff*" eos))
 ;; Org Popups
-(bmacs/make-popup (rx bos "*Calendar*" eos))
-(bmacs/make-popup (rx bos "*Org todo*" eos) 0.05)
-(bmacs/make-popup (rx bos "*Org Note*" eos) 0.1)
-(bmacs/make-popup (rx bos "*Org Select*" eos) 0.2)
-(bmacs/make-popup (rx bos "*Org Links*" eos) 0.05)
-(bmacs/make-popup (rx bos "*Org Export Dispatcher*" eos) 0.05)
-(bmacs/make-popup (rx bos "*Org Commands*" eos) 0.05)
-(bmacs/make-popup (rx bos "*Org Agenda") 0.2)
-(bmacs/make-popup (rx bos "*Agenda Commands*" eos) 0.2)
-(bmacs/make-popup (rx bos "*Org Clock*" eos))
-(bmacs/make-popup (rx bos "*Org Src"))
-(bmacs/make-popup (rx bos "*Edit Formulas*" eos) 0.01)
-(bmacs/make-popup (rx bos "*Org-Babel") 0.25)
-(bmacs/make-popup (rx bos "CAPTURE") 0.2)
+(mikemacs/make-popup (rx bos "*Calendar*" eos))
+(mikemacs/make-popup (rx bos "*Org todo*" eos) 0.05)
+(mikemacs/make-popup (rx bos "*Org Note*" eos) 0.1)
+(mikemacs/make-popup (rx bos "*Org Select*" eos) 0.2)
+(mikemacs/make-popup (rx bos "*Org Links*" eos) 0.05)
+(mikemacs/make-popup (rx bos "*Org Export Dispatcher*" eos) 0.05)
+(mikemacs/make-popup (rx bos "*Org Commands*" eos) 0.05)
+(mikemacs/make-popup (rx bos "*Org Agenda") 0.2)
+(mikemacs/make-popup (rx bos "*Agenda Commands*" eos) 0.2)
+(mikemacs/make-popup (rx bos "*Org Clock*" eos))
+(mikemacs/make-popup (rx bos "*Org Src"))
+(mikemacs/make-popup (rx bos "*Edit Formulas*" eos) 0.01)
+(mikemacs/make-popup (rx bos "*Org-Babel") 0.25)
+(mikemacs/make-popup (rx bos "CAPTURE") 0.2)
 ;; Scratch Buffer
-(bmacs/make-popup (rx bos "*scratch*" eos) 0.4)
+(mikemacs/make-popup (rx bos "*scratch*" eos) 0.4)
 #+END_SRC
 
 
@@ -6949,7 +6950,7 @@ Now we're going to create a set of rules based on the buffers we would like to b
       (shrink-window arg)
     (enlarge-window arg)))
 
- (defhydra bmacs-hydra-window ()
+ (defhydra mikemacs-hydra-window ()
    "
 Movement^^        ^Split^         ^Switch^		^Resize^
 ----------------------------------------------------------------
@@ -6997,7 +6998,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
           (add-hook 'ace-window-end-once-hook
                     'hydra-window/body)))
    ("o" delete-other-windows)
-   ("m" ace-maximize-window)
+   ("m" ace-delete-other-windows)
    ("=" balance-windows)
    ("z" (progn
           (winner-undo)
@@ -7010,7 +7011,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
 *** Smerge
 
 #+BEGIN_SRC emacs-lisp
-    (defhydra bmacs-hydra-smerge (:hint nil
+    (defhydra mikemacs-hydra-smerge (:hint nil
                             :pre (smerge-mode 1)
                             ;; Disable `smerge-mode' when quitting hydra if
                             ;; no merge conflicts remain.
@@ -7051,7 +7052,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
 *** Zoom
 
 #+BEGIN_SRC emacs-lisp
-  (defhydra bmacs-hydra-text-zoom (:hint t :color red)
+  (defhydra mikemacs-hydra-text-zoom (:hint t :color red)
     "
       Text zoom: _j_:zoom in, _k_:zoom out, _0_:reset
 "
@@ -7065,12 +7066,12 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
 *** File Functions
 
 #+BEGIN_SRC emacs-lisp
-  (defun bmacs/copy-file ()
+  (defun mikemacs/copy-file ()
     "Write the file under new name."
     (interactive)
     (call-interactively 'write-file))
 
-  (defun bmacs/rename-file (filename &optional new-filename)
+  (defun mikemacs/rename-file (filename &optional new-filename)
     "Rename FILENAME to NEW-FILENAME.
 
   When NEW-FILENAME is not specified, asks user for a new name.
@@ -7101,7 +7102,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
                  (call-interactively #'projectile-invalidate-cache))
                (message "File '%s' successfully renamed to '%s'" short-name (file-name-nondirectory new-name)))))))
 
-  (defun bmacs/rename-current-buffer-file ()
+  (defun mikemacs/rename-current-buffer-file ()
     "Renames current buffer and file it is visiting."
     (interactive)
     (let* ((name (buffer-name))
@@ -7127,7 +7128,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
                    (call-interactively #'projectile-invalidate-cache))
                  (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
-  (defun bmacs/delete-file (filename &optional ask-user)
+  (defun mikemacs/delete-file (filename &optional ask-user)
     "Remove specified file or directory.
 
   Also kills associated buffer (if any exists) and invalidates
@@ -7146,14 +7147,14 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
         (when (projectile-project-p)
           (call-interactively #'projectile-invalidate-cache)))))
 
-  (defun bmacs/delete-file-confirm (filename)
+  (defun mikemacs/delete-file-confirm (filename)
     "Remove specified file or directory after users approval.
 
-  FILENAME is deleted using `bmacs/delete-file' function.."
+  FILENAME is deleted using `mikemacs/delete-file' function.."
     (interactive "f")
-    (funcall-interactively #'bmacs/delete-file filename t))
+    (funcall-interactively #'mikemacs/delete-file filename t))
 
-  (defun bmacs/delete-current-buffer-file ()
+  (defun mikemacs/delete-current-buffer-file ()
     "Removes file connected to current buffer and kills buffer."
     (interactive)
     (let ((filename (buffer-file-name))
@@ -7169,7 +7170,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
           (message "File '%s' successfully removed" filename)))))
 
   ;; TODO: properly handle ssh hostnames formatted user@host
-  (defun bmacs/sudo-edit (&optional arg)
+  (defun mikemacs/sudo-edit (&optional arg)
     (interactive "P")
     (let ((fname (if (or arg (not buffer-file-name))
                      (read-file-name "File: ")
@@ -7189,7 +7190,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
                 (buffer-string)))
              (t (concat "/sudo:root@localhost:" fname))))))
 
-  (defun bmacs/show-and-copy-buffer-filename ()
+  (defun mikemacs/show-and-copy-buffer-filename ()
     "Show and copy the full path to the current file in the minibuffer."
     (interactive)
     ;; list-buffers-directory is the variable set in dired buffers
@@ -7200,7 +7201,7 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
             (message file-name))
         (error "Buffer not visiting a file"))))
 
-  (defun bmacs/alternate-buffer (&optional window)
+  (defun mikemacs/alternate-buffer (&optional window)
     "Switch back and forth between current and last buffer in the
   current window."
     (interactive)
@@ -7218,13 +7219,13 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
            ;; `other-buffer' honors `buffer-predicate' so no need to filter
            (other-buffer current-buffer t)))))
 
-  (defun bmacs/toggle-fold ()
+  (defun mikemacs/toggle-fold ()
     (interactive)
     (save-excursion
       (end-of-line)
       (hs-toggle-hiding)))
 
-  (defun bmacs/sudo-find-file (file)
+  (defun mikemacs/sudo-find-file (file)
     "Open a file as root."
     (interactive
      (list (read-file-name "Open as root: ")))
@@ -7232,23 +7233,23 @@ _SPC_ cancel	_o_nly this   	_d_elete			_=_ Balance
                    file
                  (concat "/sudo:root@localhost:" file))))
 
-  (defun bmacs/sudo-this-file ()
+  (defun mikemacs/sudo-this-file ()
     "Open the current file as root."
     (interactive)
-    (bmacs/sudo-find-file (file-truename buffer-file-name)))
+    (mikemacs/sudo-find-file (file-truename buffer-file-name)))
 #+END_SRC
 
 *** Buffer Functions
 
 #+BEGIN_SRC emacs-lisp
-(defun bmacs/kill-buffer-and-windows (buffer)
+(defun mikemacs/kill-buffer-and-windows (buffer)
   "Kill the buffer and delete all the windows it's displayed in."
   (dolist (window (get-buffer-window-list buffer))
     (unless (one-window-p t)
       (delete-window window)))
   (kill-buffer buffer))
 
-(defun bmacs/kill-other-buffers (&optional persp-p)
+(defun mikemacs/kill-other-buffers (&optional persp-p)
   "Kill all other buffers (besides the current one).
 
 If PROJECT-P (universal argument), kill only buffers that belong to the current
@@ -7258,18 +7259,18 @@ project."
         (current-buffer (current-buffer)))
     (dolist (buf buffers)
       (unless (eq buf current-buffer)
-        (bmacs/kill-buffer-and-windows buf)))
+        (mikemacs/kill-buffer-and-windows buf)))
     (when (called-interactively-p 'interactive)
       (message "Killed %s buffers" (length buffers)))))
 
- (defun bmacs//get-buffer-display-time (buffer start-time)
+ (defun mikemacs//get-buffer-display-time (buffer start-time)
    (with-current-buffer buffer
      (let ((buffer-time (float-time buffer-display-time)))
        (if (< start-time buffer-time)
            0
          buffer-time))))
 
- (defun bmacs/show-hide-popup-buffer (&optional select buffer-rx)
+ (defun mikemacs/show-hide-popup-buffer (&optional select buffer-rx)
    (interactive)
    (let ((start-time (float-time (current-time)))
          (open-popup-buffers
@@ -7283,7 +7284,7 @@ project."
                  (seq-some
                    (lambda (buff-rx)
                      (string-match buff-rx (buffer-name buff)))
-                   bmacs-popups))
+                   mikemacs-popups))
                (mapcar #'window-buffer (window-at-side-list)))))
          (closed-popup-buffers
            (if buffer-rx
@@ -7296,7 +7297,7 @@ project."
                  (seq-some
                    (lambda (buff-rx)
                      (string-match buff-rx (buffer-name buff)))
-                   bmacs-popups))
+                   mikemacs-popups))
                (buffer-list)))))
    (cond ((= 1 (length open-popup-buffers))
           (delete-window (get-buffer-window (car open-popup-buffers))))
@@ -7307,13 +7308,13 @@ project."
                  (sort
                    open-popup-buffers
                    #'(lambda (a b)
-                     (> (bmacs//get-buffer-display-time a start-time) (bmacs//get-buffer-display-time b start-time))))))))
+                     (> (mikemacs//get-buffer-display-time a start-time) (mikemacs//get-buffer-display-time b start-time))))))))
          ((> 0 (length open-popup-buffers))
            (ivy-read "Close popup: "
                  (mapcar #'buffer-name open-popup-buffers)
                  :action (lambda (x)
                            (delete-window (get-buffer-window x)))
-                 :caller 'bmacs/show-hide-popup-buffer))
+                 :caller 'mikemacs/show-hide-popup-buffer))
          ((seq-empty-p closed-popup-buffers)
           (message "No popup buffers found"))
          ((= 1 (length closed-popup-buffers))
@@ -7324,22 +7325,22 @@ project."
                (sort
                  closed-popup-buffers
                  #'(lambda (a b)
-                   (> (bmacs//get-buffer-display-time a start-time) (bmacs//get-buffer-display-time b start-time)))))))
+                   (> (mikemacs//get-buffer-display-time a start-time) (mikemacs//get-buffer-display-time b start-time)))))))
          (t
           (ivy-read "Open popup: "
                  (mapcar #'buffer-name closed-popup-buffers)
                  :require-match t
                  :action (lambda (x)
                            (pop-to-buffer x))
-                 :caller 'bmacs/show-hide-popup-buffer)))))
+                 :caller 'mikemacs/show-hide-popup-buffer)))))
 
-(defun bmacs/toggle-whitespace ()
+(defun mikemacs/toggle-whitespace ()
   (interactive)
   (if (and (boundp 'whitespace-mode) whitespace-mode)
       (whitespace-mode -1)
     (whitespace-mode +1)))
 
-(defun bmacs/scratch-buffer ()
+(defun mikemacs/scratch-buffer ()
   (interactive)
   (let ((text (and (region-active-p)
                    (buffer-substring-no-properties
@@ -7363,7 +7364,7 @@ project."
 *** Window Functions
 
 #+BEGIN_SRC emacs-lisp
-(defun bmacs/window-zoom ()
+(defun mikemacs/window-zoom ()
   "Maximize and isolate the current buffer. Activate again to undo this. If the
 window changes before then, the undo expires."
   (interactive)
@@ -7409,32 +7410,32 @@ window changes before then, the undo expires."
 
   (defun workspace-bookmark-p (bmark)
     (let ((bmark-path (expand-file-name (bookmark-location bmark))))
-      (string-prefix-p (bmacs-project-root) bmark-path)))
+      (string-prefix-p (mikemacs-project-root) bmark-path)))
 #+END_SRC
 
 *** Random Functions
 
 #+BEGIN_SRC emacs-lisp
-(defun bmacs/delete-git-index-lock ()
+(defun mikemacs/delete-git-index-lock ()
   "Deletes index.lock file for git project if it exists"
   (interactive)
   (let ((git-index-lock-file (concat (magit-git-dir) "index.lock")))
     (when (file-exists-p git-index-lock-file)
       (delete-file git-index-lock-file))))
 
-(defun bmacs/ace-delete-window-dispatch ()
+(defun mikemacs/ace-delete-window-dispatch ()
   "Invokes ace-delete window with aw-dispatch-always temporarily set to true"
   (interactive)
   (let ((aw-dispatch-always t))
     (call-interactively #'ace-delete-window)))
 
-(defun bmacs/file-as-string (filePath)
+(defun mikemacs/file-as-string (filePath)
   "Return filePath's file content."
   (with-temp-buffer
     (insert-file-contents filePath)
     (buffer-string)))
 
-(defun bmacs/set-limit-fill-column ()
+(defun mikemacs/set-limit-fill-column ()
   (interactive)
   (let ((column (string-to-number
                  (read-string "Fill Column: "))))
@@ -7444,7 +7445,7 @@ window changes before then, the undo expires."
       (auto-fill-mode -1)
       (visual-fill-column-mode +1))))
 
-(defun bmacs/set-limit-auto-fill-column ()
+(defun mikemacs/set-limit-auto-fill-column ()
   (interactive)
   (let ((column (string-to-number
                  (read-string "Fill Column: "))))
@@ -7454,7 +7455,7 @@ window changes before then, the undo expires."
       (auto-fill-mode +1)
       (visual-fill-column-mode +1))))
 
-(defun bmacs/disable-all-fill-column ()
+(defun mikemacs/disable-all-fill-column ()
   (interactive)
   (visual-line-mode -1)
   (auto-fill-mode -1)
@@ -7492,8 +7493,8 @@ session)."
  "M-;"    #'eval-expression
  "M-u"    #'universal-argument
  ;; Tools
- "C-`"    #'bmacs/show-hide-popup-buffer
- "C-~"    (λ! (bmacs/show-hide-popup-buffer t))
+ "C-`"    #'mikemacs/show-hide-popup-buffer
+ "C-~"    (λ! (mikemacs/show-hide-popup-buffer t))
  ;; Text-scaling
  "M-0"    (λ! (text-scale-set 0))
  "M-="    #'text-scale-increase
@@ -7504,14 +7505,14 @@ session)."
  ;; Indent on tab
  :nvi "TAB"     #'indent-for-tab-command
  ;; Fold toggle
- :nv [C-backspace] #'bmacs/toggle-fold
+ :nv [C-backspace] #'mikemacs/toggle-fold
  :nv [S-backspace] #'hs-hide-level
  :nv [C-S-backspace] #'hs-show-all
 
   :m ";" #'evil-ex
   (:leader
     ;; common
-    :desc "Blink cursor line"                :nv "SPC" #'bmacs/blink-cursor
+    :desc "Blink cursor line"                :nv "SPC" #'mikemacs/blink-cursor
     :desc "Counsel M-x"                      :nv ":" #'counsel-M-x
     :desc "Eval expr"                        :nv ";" #'eval-expression
     :desc "Run shell command"                :nv "!" #'shell-command
@@ -7519,7 +7520,7 @@ session)."
     :desc "Search from here"                 :nv "?" #'counsel-rg
     :desc "Find selection in project"        :nv "*" #'counsel-projectile-rg-region-or-symbol
     :desc "Switch to Emacs mode"             :n "|" #'evil-emacs-state
-    :desc "Switch to last buffer"            :nv "TAB" #'bmacs/alternate-buffer
+    :desc "Switch to last buffer"            :nv "TAB" #'mikemacs/alternate-buffer
     :desc "Ace window"                       :nv "W" #'ace-window
     :desc "Pop terminal"                     :nv "'" #'+term/open-popup
     :desc "Pop eshell"                       :nv "`" #'+eshell/popup
@@ -7527,13 +7528,13 @@ session)."
     (:desc "file"
       :prefix "f"
       :desc "Open file from here"            :nv "f" #'counsel-find-file
-      :desc "Sudo open file from here"       :nv "F" #'bmacs/sudo-find-file
+      :desc "Sudo open file from here"       :nv "F" #'mikemacs/sudo-find-file
       :desc "Copy file"                      :nv "c" #'copy-file
-      :desc "Copy current file"              :nv "C" #'bmacs/copy-file
-      :desc "Rename current file"            :nv "R" #'bmacs/rename-current-buffer-file
-      :desc "Delete file"                    :nv "d" #'bmacs/delete-file-confirm
-      :desc "Delete current file"            :nv "D" #'bmacs/delete-current-buffer-file
-      :desc "Sudo edit file"                 :nv "E" #'bmacs/sudo-edit
+      :desc "Copy current file"              :nv "C" #'mikemacs/copy-file
+      :desc "Rename current file"            :nv "R" #'mikemacs/rename-current-buffer-file
+      :desc "Delete file"                    :nv "d" #'mikemacs/delete-file-confirm
+      :desc "Delete current file"            :nv "D" #'mikemacs/delete-current-buffer-file
+      :desc "Sudo edit file"                 :nv "E" #'mikemacs/sudo-edit
       :desc "Recent files"                   :nv "r" #'counsel-recentf
       :desc "Neotree toggle"                 :nv "t" #'neotree-toggle
       :desc "Save buffer"                    :nv "s" #'save-buffer
@@ -7542,7 +7543,7 @@ session)."
       :desc "Remote"                         :nv "i" (λ! (counsel-find-file "/"))
       :desc "Cleanup this tramp conn"        :nv "x" #'tramp-cleanup-this-connection
       :desc "Cleanup all tramp conns"        :nv "X" (λ! (tramp-cleanup-all-buffers) (tramp-cleanup-all-connections))
-      :desc "Show and copy filename"         :nv "y" #'bmacs/show-and-copy-buffer-filename
+      :desc "Show and copy filename"         :nv "y" #'mikemacs/show-and-copy-buffer-filename
       )
 
     (:desc "buffer"
@@ -7551,10 +7552,10 @@ session)."
       :desc "Switch workspace buffer"        :nv "b" #'counsel-projectile-switch-to-buffer
       :desc "Switch buffer"                  :nv "B" #'ivy-switch-buffer
       :desc "Kill buffer"                    :nv "d" #'kill-this-buffer
-      :desc "Kill other buffers"             :nv "D" (λ! (bmacs/kill-other-buffers t))
+      :desc "Kill other buffers"             :nv "D" (λ! (mikemacs/kill-other-buffers t))
       :desc "Kill a buffer"                  :nv "k" #'kill-buffer
       :desc "New empty buffer"               :nv "n" #'evil-buffer-new
-      :desc "Scratch buffer"                 :nv "s" #'bmacs/scratch-buffer
+      :desc "Scratch buffer"                 :nv "s" #'mikemacs/scratch-buffer
       ;; TODO spacemacs/copy-whole-buffer-to-clipboard y
       ;; TODO spacemacs/paste-whole-file-to-clipboard p
       )
@@ -7598,7 +7599,7 @@ session)."
       :desc "Split window horizontal"      :nv "-" #'split-window-below
       :desc "Balance windows"              :nv "=" #'balance-windows
       :desc "Delete current window"        :nv "d" #'delete-window
-      :desc "Ace delete window"            :nv "D" #'bmacs/ace-delete-window-dispatch
+      :desc "Ace delete window"            :nv "D" #'mikemacs/ace-delete-window-dispatch
       :desc "Window left"                  :nv "h" #'evil-window-left
       :desc "Window down"                  :nv "j" #'evil-window-down
       :desc "Window right"                 :nv "l" #'evil-window-right
@@ -7611,13 +7612,13 @@ session)."
       :desc "Winner undo"                  :nv "u" #'winner-undo
       :desc "Winner redo"                  :nv "U" #'winner-redo
       :desc "Ace window"                   :nv "W" #'ace-window
-      :desc "Manage Windows"               :nv "w" #'bmacs-hydra-window/body
-      :desc "Toggle maximize window"       :nv "m" #'bmacs/window-zoom)
+      :desc "Manage Windows"               :nv "w" #'mikemacs-hydra-window/body
+      :desc "Toggle maximize window"       :nv "m" #'mikemacs/window-zoom)
 
     (:desc "jump"
       :prefix "j"
-      :desc "Go definition"                :nv "q" #'bmacs/jump-definition
-      :desc "Go definition other window"   :nv "Q" #'bmacs/jump-definition-other-window
+      :desc "Go definition"                :nv "q" #'mikemacs/jump-definition
+      :desc "Go definition other window"   :nv "Q" #'mikemacs/jump-definition-other-window
       :desc "Avy go to line"               :nv "l" #'avy-goto-line
       :desc "Avy go to word"               :nv "w" #'evil-avy-goto-word-or-subword-1
       :desc "Avy go to char"               :nv "j" #'avy-goto-char-2
@@ -7631,10 +7632,10 @@ session)."
       :desc "Git time machine"             :nv "t" #'git-timemachine
       :desc "Git log current file"         :nv "f" #'magit-file-popup
       :desc "Git log all"                  :nv "l" #'magit-log-all
-      :desc "Smerge Hydra"                 :nv "m" #'bmacs-hydra-smerge/body
+      :desc "Smerge Hydra"                 :nv "m" #'mikemacs-hydra-smerge/body
       :desc "Show and copy git link"       :nv "y" #'git-link
-      :desc "Open git link"                :nv "o" #'bmacs/git-browse
-      :desc "Delete git index lock"        :nv "X" #'bmacs/delete-git-index-lock
+      :desc "Open git link"                :nv "o" #'mikemacs/git-browse
+      :desc "Delete git index lock"        :nv "X" #'mikemacs/delete-git-index-lock
       (:desc "gist"
         :prefix "g"
         :desc "Gist from buffer"           :nv "b" #'gist-buffer
@@ -7664,17 +7665,17 @@ session)."
      :desc "Indent guides (column)"        :nv "I" #'highlight-indentation-current-column-mode
      :desc "Evil goggles"                  :nv "g" #'+evil-goggles/toggle
      :desc "Visual line wrapping"          :nv "v" #'visual-line-mode
-     :desc "Whitespace mode"               :nv "w" #'bmacs/toggle-whitespace)
+     :desc "Whitespace mode"               :nv "w" #'mikemacs/toggle-whitespace)
 
    (:desc "text"
      :prefix "t"
      :desc "Regular expression builder"    :nv "r" #'regexp-builder
-     :desc "Zoom"                          :nv "z" #'bmacs-hydra-text-zoom/body
+     :desc "Zoom"                          :nv "z" #'mikemacs-hydra-text-zoom/body
      (:desc "fill"
        :prefix "f"
-       :desc "Limit fill column"           :nv "l" #'bmacs/set-limit-fill-column
-       :desc "Auto limit fill column"      :nv "a" #'bmacs/set-limit-fill-column
-       :desc "Disable fill column limit"   :nv "d" #'bmacs/disable-all-fill-column)
+       :desc "Limit fill column"           :nv "l" #'mikemacs/set-limit-fill-column
+       :desc "Auto limit fill column"      :nv "a" #'mikemacs/set-limit-fill-column
+       :desc "Disable fill column limit"   :nv "d" #'mikemacs/disable-all-fill-column)
      (:desc "html"
        :prefix "h"
        :desc "Copy region as html"         :v "y" #'gdoom/htmlize-region-copy))
@@ -8049,7 +8050,7 @@ session)."
 *** Run Post Init Hook
 
 #+BEGIN_SRC emacs-lisp
-(run-hooks 'bmacs-post-init-hook)
+(run-hooks 'mikemacs-post-init-hook)
 #+END_SRC
 
 *** Web Browser
